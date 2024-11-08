@@ -22,12 +22,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Yeeter;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.ArmExtension.ExtensionPosition;
@@ -57,12 +59,21 @@ public class Robot extends TimedRobot {
   private Drivetrain m_driveTrain = new Drivetrain();
   private Yeeter yeeter = new Yeeter();
   private Intake intake = new Intake();
+  private Lights lights = new Lights();
 
   private SendableChooser<Command> autonSelector = null;
   private GenericEntry brakeModeDisable = Shuffleboard.getTab("Autonomous").add("Disable Brake Mode", false).getEntry();
 
   private Command autonCommand = none();
 
+  public Command setBlueCommand(){
+    return runOnce(()->{lights.setBlue(1);});
+  }
+
+  public Command changeColorsCommand(){
+    return runOnce(()->{lights.setColor();});
+  }
+  
   public Command getShootCommand() {
     return either(
         sequence(
@@ -180,6 +191,8 @@ public class Robot extends TimedRobot {
     }));
 
     controller.y().onTrue(getShootCommand());
+    controller.povRight().onTrue(changeColorsCommand());
+    controller.povLeft().onTrue(setBlueCommand());
 
     controller.b().and(() -> {
       return armRotation.atGoal() && armRotation.getRotation() == ArmRotation.RotationAngle.Down;

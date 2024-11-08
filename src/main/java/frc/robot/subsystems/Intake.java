@@ -137,7 +137,7 @@ public class Intake extends ProfiledPIDSubsystem {
 
     @Override
     protected void useOutput(double output, State setpoint) {
-        intakeToggle.setVoltage(output);
+        intakeToggle.setVoltage(output/10);
     }
 
     @Override
