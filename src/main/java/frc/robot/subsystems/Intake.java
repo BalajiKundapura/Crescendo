@@ -61,7 +61,7 @@ public class Intake extends ProfiledPIDSubsystem {
         intakeToggle.setIdleMode(IdleMode.kCoast);
         intakeToggle2.setIdleMode(IdleMode.kCoast);
         
-        intakeToggle.setInverted(false);
+        intakeToggle.setInverted(true);
         
         toggleEncoder.setPositionConversionFactor(360); // 135.0/28.0
         toggleEncoder.setInverted(true);
